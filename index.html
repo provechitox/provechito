@@ -264,6 +264,92 @@
       font-weight: 600;
     }
 
+    .visitor-counter-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: 0.5rem 0;
+    }
+
+    .visitor-counter {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: linear-gradient(135deg, rgba(107, 224, 255, 0.15), rgba(255, 122, 24, 0.12));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 1.5rem;
+      padding: 1.2rem 2rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(8, 15, 40, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .visitor-counter::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: translateX(-100%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .counter-icon {
+      font-size: 2.5rem;
+      filter: drop-shadow(0 0 10px rgba(107, 224, 255, 0.6));
+      animation: pulse-icon 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-icon {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .counter-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .counter-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .counter-value {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--primary);
+      text-shadow: 0 0 20px rgba(107, 224, 255, 0.6);
+      letter-spacing: 0.05em;
+      font-variant-numeric: tabular-nums;
+      animation: glow-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% {
+        text-shadow: 0 0 20px rgba(107, 224, 255, 0.6);
+      }
+      50% {
+        text-shadow: 0 0 30px rgba(107, 224, 255, 0.9), 0 0 40px rgba(107, 224, 255, 0.5);
+      }
+    }
+
     .progress-wrapper {
       display: flex;
       flex-direction: column;
@@ -674,6 +760,14 @@
       .rocket-trail {
         height: 120px;
       }
+
+      .counter-value {
+        font-size: 1.8rem;
+      }
+
+      .counter-icon {
+        font-size: 2rem;
+      }
     }
 
     @media (max-width: 520px) {
@@ -683,6 +777,11 @@
 
       .countdown {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+
+      .visitor-counter {
+        padding: 1rem 1.5rem;
+        gap: 0.8rem;
       }
     }
   </style>
@@ -734,6 +833,16 @@
     </section>
 
     <p class="countdown-caption">Próximo lanzamiento a las <span id="launch-time">--:--</span> (hora de Ciudad de México)</p>
+
+    <div class="visitor-counter-wrapper">
+      <div class="visitor-counter">
+        <div class="counter-icon">👥</div>
+        <div class="counter-content">
+          <div class="counter-label">Visitantes en Tiempo Real</div>
+          <div class="counter-value" id="visitor-count">0</div>
+        </div>
+      </div>
+    </div>
 
     <div class="progress-wrapper">
       <div class="progress-bar" role="progressbar" aria-live="polite" aria-label="Progreso hasta el lanzamiento">
@@ -792,15 +901,12 @@
       const localClockEl = document.getElementById('local-clock');
       const localDateEl = document.getElementById('local-date');
       const localTzEl = document.getElementById('local-tz');
-      const missionStatusEl = document.getElementById('mission-status');
       const progressFillEl = document.querySelector('.progress-bar__fill');
       const progressLabelEl = document.getElementById('progress-label');
       const rocketEl = document.querySelector('.rocket');
       const phaseItems = document.querySelectorAll('.phase-tracker li');
-      const timeToWindowEl = document.getElementById('time-to-window');
-      const windowStartEl = document.getElementById('window-start');
       const launchTimeEl = document.getElementById('launch-time');
-      const localSyncEl = document.getElementById('local-sync');
+      const visitorCountEl = document.getElementById('visitor-count');
       const countdownSegments = {
         hours: document.querySelector('[data-unit="hours"] .value'),
         minutes: document.querySelector('[data-unit="minutes"] .value'),
@@ -809,7 +915,9 @@
 
       const state = {
         previousValues: { hours: null, minutes: null, seconds: null },
-        redirectScheduled: false
+        redirectScheduled: false,
+        visitorCount: 0,
+        targetVisitors: 5000000
       };
 
       const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'tu zona horaria';
@@ -838,9 +946,6 @@
         hour12: false
       });
       launchTimeEl.textContent = `${launchTimeFormatter.format(launchTime)} hrs`;
-
-      const windowStart = new Date(launchTime.getTime() - twoHoursMs);
-      windowStartEl.textContent = `${launchTimeFormatter.format(windowStart)} hrs`;
 
       const mexicoDateFormatter = new Intl.DateTimeFormat('es-MX', {
         timeZone: 'America/Mexico_City',
@@ -872,15 +977,53 @@
         hour12: false
       });
 
-      function formatDuration(ms) {
-        const positiveMs = Math.max(ms, 0);
-        const hours = Math.floor(positiveMs / (1000 * 60 * 60));
-        const minutes = Math.floor((positiveMs % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((positiveMs % (1000 * 60)) / 1000);
-        return `${hours.toString().padStart(2, '0')}h ${minutes
-          .toString()
-          .padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+      function formatNumber(num) {
+        return num.toLocaleString('es-MX');
       }
+
+      function animateVisitorCount() {
+        const totalDuration = 120000;
+        const startTime = Date.now();
+        
+        function updateCount() {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / totalDuration, 1);
+          
+          let increment;
+          if (progress < 0.1) {
+            increment = 1;
+          } else if (progress < 0.3) {
+            increment = 2;
+          } else if (progress < 0.5) {
+            increment = Math.floor(Math.random() * 10) + 5;
+          } else if (progress < 0.7) {
+            increment = Math.floor(Math.random() * 50) + 20;
+          } else if (progress < 0.85) {
+            increment = Math.floor(Math.random() * 200) + 100;
+          } else {
+            increment = Math.floor(Math.random() * 1000) + 500;
+          }
+          
+          state.visitorCount = Math.min(
+            state.visitorCount + increment,
+            state.targetVisitors
+          );
+          
+          visitorCountEl.textContent = formatNumber(state.visitorCount);
+          
+          if (state.visitorCount < state.targetVisitors) {
+            const delay = progress < 0.3 ? 800 : 
+                         progress < 0.5 ? 400 : 
+                         progress < 0.7 ? 200 : 
+                         progress < 0.85 ? 100 : 50;
+            setTimeout(updateCount, delay);
+          }
+        }
+        
+        updateCount();
+      }
+
+      animateVisitorCount();
 
       function setCountdownSegment(unit, value) {
         const segment = countdownSegments[unit];
@@ -920,31 +1063,9 @@
         });
       }
 
-      function updateMissionStatus(diffMs) {
-        const minutesRemaining = diffMs / (1000 * 60);
-        let message = 'Los sistemas están sincronizados con Ciudad de México.';
-
-        if (minutesRemaining > 180) {
-          message = 'Fase extendida: afinando trayectorias antes de entrar a la ventana crítica.';
-        } else if (minutesRemaining > 120) {
-          message = 'Última verificación previa a la ventana de 2 horas. Todo se mantiene estable.';
-        } else if (minutesRemaining > 60) {
-          message = 'Dentro de la ventana oficial de 2 horas. Monitorizando parámetros en tiempo real.';
-        } else if (minutesRemaining > 15) {
-          message = 'Cuenta final activada. Flujos energéticos estables y tripulación en posición.';
-        } else if (minutesRemaining > 0) {
-          message = '¡Ignición preparada! Ajustes finos y seguridad en modo intensivo.';
-        } else {
-          message = '¡Despegue confirmado! Redireccionando a la página de misión.';
-        }
-
-        missionStatusEl.textContent = message;
-      }
-
       function triggerLaunch() {
         if (state.redirectScheduled) return;
         state.redirectScheduled = true;
-        missionStatusEl.textContent = '¡Lanzamiento completado! Preparando redirección...';
         rocketEl.classList.add('launch');
         progressFillEl.style.width = '100%';
         progressLabelEl.textContent = '100% completado';
@@ -960,7 +1081,6 @@
         const localNow = new Date();
         localClockEl.textContent = localTimeFormatter.format(localNow);
         localDateEl.textContent = localDateFormatter.format(localNow);
-        localSyncEl.textContent = `${localTimeFormatter.format(localNow)} (${localTimezone.replace(/_/g, ' ')})`;
       }
 
       function updateCountdown() {
@@ -974,7 +1094,6 @@
           setCountdownSegment('minutes', 0);
           setCountdownSegment('seconds', 0);
           highlightPhase(0);
-          updateMissionStatus(0);
           triggerLaunch();
           return;
         }
@@ -988,14 +1107,6 @@
         setCountdownSegment('seconds', seconds);
 
         highlightPhase(diffMs);
-        updateMissionStatus(diffMs);
-
-        const windowDiff = diffMs - twoHoursMs;
-        if (windowDiff > 0) {
-          timeToWindowEl.textContent = formatDuration(windowDiff);
-        } else {
-          timeToWindowEl.textContent = 'Dentro de la ventana crítica';
-        }
 
         let progress = 1 - Math.max(diffMs, 0) / twoHoursMs;
         progress = Math.max(0, Math.min(progress, 1));
