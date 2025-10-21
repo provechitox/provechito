@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>|°Diane Jonhson Miller°| EE.UU | México | </title>
+  <style>
+    :root {
+      --bg: #050718;
+      --bg-secondary: #0b1026;
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-strong: rgba(255, 255, 255, 0.14);
+      --primary: #6be0ff;
+      --accent: #ff7a18;
+      --accent-strong: #ffb347;
+      --text: #f2f6ff;
+      --text-muted: #b8c6ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Poppins", "Montserrat", sans-serif;
+      background: radial-gradient(circle at top, rgba(30, 64, 255, 0.18), transparent 45%),
+        radial-gradient(circle at bottom left, rgba(255, 122, 24, 0.16), transparent 40%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.35;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: floatOrb 28s ease-in-out infinite;
+    }
+
+    body::before {
+      top: -35vmax;
+      right: -20vmax;
+      width: 70vmax;
+      height: 70vmax;
+      background: radial-gradient(circle, rgba(96, 216, 255, 0.5), transparent 65%);
+    }
+
+    body::after {
+      bottom: -30vmax;
+      left: -25vmax;
+      width: 60vmax;
+      height: 60vmax;
+      background: radial-gradient(circle, rgba(255, 122, 24, 0.45), transparent 60%);
+      animation-delay: -12s;
+    }
+
+    main.container {
+      position: relative;
+      z-index: 2;
+      max-width: min(1120px, 92vw);
+      margin: 0 auto;
+      padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 2.5rem) 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1.75rem, 5vw, 3rem);
+    }
+
+    .hero {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .tagline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      align-self: center;
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 122, 24, 0.18);
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      box-shadow: inset 0 0 0 1px rgba(255, 122, 24, 0.35), 0 8px 18px rgba(255, 122, 24, 0.18);
+    }
+
+    .tagline::before {
+      content: "🚀";
+      font-size: 1rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.1rem, 6vw, 3.75rem);
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 0 12px 30px rgba(107, 224, 255, 0.2);
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: clamp(1rem, 2.3vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 600px;
+      align-self: center;
+      line-height: 1.6;
+    }
+
+    canvas#starfield {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .time-panels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: clamp(1rem, 3.6vw, 1.75rem);
+    }
+
+    .panel {
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1.5rem;
+      padding: clamp(1.4rem, 4vw, 1.9rem);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 32px 50px rgba(8, 15, 40, 0.45);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      z-index: -1;
+    }
+
+    .panel:hover::after {
+      opacity: 1;
+    }
+
+    .panel h2 {
+      margin: 0 0 0.7rem;
+      font-size: 1.1rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .digital-clock {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--primary);
+      text-shadow: 0 0 18px rgba(107, 224, 255, 0.45);
+    }
+
+    .date {
+      display: block;
+      margin-top: 0.55rem;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.75);
+      text-transform: capitalize;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: clamp(1rem, 3.2vw, 1.8rem);
+      text-align: center;
+    }
+
+    .segment {
+      position: relative;
+      padding: clamp(1.6rem, 4.2vw, 2.1rem) 1rem;
+      border-radius: 1.8rem;
+      background: linear-gradient(160deg, rgba(10, 16, 40, 0.6), rgba(12, 18, 46, 0.45));
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 35px 60px rgba(5, 9, 20, 0.6), inset 0 0 0 1px rgba(107, 224, 255, 0.08);
+      overflow: hidden;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .segment::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(107, 224, 255, 0.22), transparent 65%);
+      opacity: 0.85;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .segment::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(130deg, transparent 40%, rgba(255, 255, 255, 0.12), transparent 65%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .segment:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 45px 80px rgba(8, 15, 40, 0.7);
+    }
+
+    .segment:hover::after {
+      opacity: 1;
+    }
+
+    .segment.pulse {
+      animation: pulseSegment 0.6s ease;
+    }
+
+    .segment .value {
+      font-size: clamp(3rem, 6vw, 4.2rem);
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--text);
+      display: block;
+    }
+
+    .segment .label {
+      margin-top: 0.45rem;
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .countdown-caption {
+      text-align: center;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0;
+    }
+
+    .countdown-caption span {
+      color: var(--accent-strong);
+      font-weight: 600;
+    }
+
+    .progress-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      background: var(--glass);
+      border-radius: 1.2rem;
+      padding: 1.2rem 1.4rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 28px 40px rgba(7, 12, 30, 0.45);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+
+    .progress-bar__fill {
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(107, 224, 255, 0.15), rgba(255, 122, 24, 0.85));
+      box-shadow: 0 0 25px rgba(255, 122, 24, 0.45);
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #progress-label {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .rocket-trail {
+      position: relative;
+      height: 140px;
+      margin-top: -0.5rem;
+    }
+
+    .rocket-trail::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 60%;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(107, 224, 255, 0.7), rgba(255, 122, 24, 0.1));
+      filter: blur(0.5px);
+    }
+
+    .rocket {
+      position: absolute;
+      bottom: 0;
+      left: calc(var(--rocket-progress, 0) * 1%);
+      transform: translateX(-50%);
+      width: 68px;
+      height: 120px;
+      transition: left 0.6s ease-out;
+      --rocket-progress: 0;
+    }
+
+    .rocket-body {
+      position: absolute;
+      left: 50%;
+      top: 12px;
+      width: 30px;
+      height: 78px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, rgba(107, 224, 255, 0.9), rgba(9, 20, 50, 0.95));
+      border-radius: 50% 50% 45% 45%;
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.2), 0 12px 25px rgba(107, 224, 255, 0.45);
+    }
+
+    .rocket-window {
+      position: absolute;
+      left: 50%;
+      top: 32px;
+      width: 16px;
+      height: 16px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(69, 165, 232, 0.9));
+      box-shadow: 0 0 12px rgba(107, 224, 255, 0.55);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .rocket-fin {
+      position: absolute;
+      bottom: 20px;
+      width: 18px;
+      height: 28px;
+      background: linear-gradient(180deg, rgba(255, 122, 24, 0.8), rgba(180, 65, 3, 0.9));
+      box-shadow: 0 10px 18px rgba(255, 122, 24, 0.3);
+    }
+
+    .rocket-fin--left {
+      left: 10px;
+      clip-path: polygon(0 0, 100% 20%, 100% 100%, 0% 100%);
+    }
+
+    .rocket-fin--right {
+      right: 10px;
+      clip-path: polygon(0 20%, 100% 0, 100% 100%, 0% 100%);
+    }
+
+    .rocket-flame {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 16px;
+      height: 40px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.95), rgba(255, 197, 110, 0.9), rgba(255, 122, 24, 0.9));
+      border-radius: 50% 50% 60% 60%;
+      filter: blur(0.4px);
+      animation: flame 0.8s ease-in-out infinite;
+    }
+
+    .rocket.launch {
+      animation: rocketLiftOff 4s ease-in forwards;
+    }
+
+    .telemetry {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: clamp(1rem, 3vw, 1.8rem);
+    }
+
+    .card {
+      background: linear-gradient(160deg, rgba(8, 12, 32, 0.75), rgba(9, 14, 38, 0.55));
+      border-radius: 1.4rem;
+      padding: clamp(1.2rem, 3.5vw, 1.8rem);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 28px 44px rgba(5, 8, 22, 0.55);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(107, 224, 255, 0.22), transparent 65%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .card h3 {
+      margin: 0 0 0.8rem;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .card p {
+      margin: 0 0 0.6rem;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.55;
+    }
+
+    .card strong {
+      color: var(--primary);
+    }
+
+    .phase-section h2,
+    .timeline h2 {
+      margin: 0 0 1.1rem;
+      font-size: clamp(1.35rem, 3.6vw, 1.8rem);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .phase-tracker {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .phase-tracker li {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1.1rem 1.2rem;
+      border-radius: 1.1rem;
+      border: 1px solid transparent;
+      position: relative;
+      transition: border-color 0.4s ease, transform 0.4s ease;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .phase-tracker li::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: 20px;
+      bottom: 20px;
+      width: 4px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(107, 224, 255, 0.5), rgba(255, 122, 24, 0.35));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .phase-tracker li.active {
+      border-color: rgba(107, 224, 255, 0.6);
+      transform: translateX(6px);
+      box-shadow: 0 18px 35px rgba(10, 20, 46, 0.6);
+      background: linear-gradient(120deg, rgba(9, 18, 50, 0.9), rgba(14, 28, 70, 0.65));
+    }
+
+    .phase-tracker li.active::before {
+      opacity: 1;
+    }
+
+    .phase-title {
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .phase-desc {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .timeline {
+      background: rgba(9, 14, 38, 0.45);
+      padding: clamp(1.6rem, 4vw, 2.2rem);
+      border-radius: 1.6rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 0 0 1px rgba(107, 224, 255, 0.05), 0 28px 45px rgba(4, 8, 20, 0.6);
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: clamp(1rem, 3vw, 1.6rem);
+    }
+
+    .timeline-card {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 1.1rem 1.2rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: grid;
+      gap: 0.4rem;
+      box-shadow: 0 18px 28px rgba(5, 10, 25, 0.45);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .timeline-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 45px rgba(5, 10, 25, 0.55);
+    }
+
+    .timeline-card h4 {
+      margin: 0;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+    }
+
+    .timeline-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.5;
+    }
+
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(60px);
+      mix-blend-mode: screen;
+      opacity: 0.6;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .orb--one {
+      top: 10vh;
+      left: 8vw;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(107, 224, 255, 0.35), transparent 60%);
+      animation: floatOrb 24s ease-in-out infinite;
+    }
+
+    .orb--two {
+      bottom: 12vh;
+      right: 12vw;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(255, 122, 24, 0.38), transparent 60%);
+      animation: floatOrb 32s ease-in-out infinite;
+      animation-delay: -8s;
+    }
+
+    .orb--three {
+      top: 35vh;
+      right: 45vw;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(96, 162, 255, 0.4), transparent 65%);
+      animation: floatOrb 28s ease-in-out infinite;
+      animation-delay: -16s;
+    }
+
+    @keyframes floatOrb {
+      0%,
+      100% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      25% {
+        transform: translate3d(20px, 30px, 0) scale(1.05);
+      }
+      50% {
+        transform: translate3d(-25px, 10px, 0) scale(0.95);
+      }
+      75% {
+        transform: translate3d(18px, -22px, 0) scale(1.08);
+      }
+    }
+
+    @keyframes pulseSegment {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.045);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes flame {
+      0% {
+        transform: translateX(-50%) scaleY(1);
+        opacity: 0.9;
+      }
+      50% {
+        transform: translateX(-50%) scaleY(1.2);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateX(-50%) scaleY(0.9);
+        opacity: 0.95;
+      }
+    }
+
+    @keyframes rocketLiftOff {
+      0% {
+        transform: translateX(-50%) translateY(0) scale(1);
+        opacity: 1;
+      }
+      40% {
+        transform: translateX(-50%) translateY(-160px) scale(1.05);
+      }
+      70% {
+        transform: translateX(-50%) translateY(-360px) scale(0.9);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-50%) translateY(-520px) scale(0.75);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .segment .value {
+        letter-spacing: 0.08em;
+      }
+
+      .rocket-trail {
+        height: 120px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero h1 {
+        font-size: 1.95rem;
+      }
+
+      .countdown {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="orb orb--one" aria-hidden="true"></div>
+  <div class="orb orb--two" aria-hidden="true"></div>
+  <div class="orb orb--three" aria-hidden="true"></div>
+
+  <main class="container">
+    <header class="hero">
+      <span class="tagline">Lanzamiento en ... horas</span>
+      <h1>|°Diane Jonhson Miller°| </h1>
+      
+       <p>Fundadores: [PROVECHITO] DERECK Josue Rebollar Carranza |</p>
+        <hr>
+        <p style="font-family: Arial, sans-serif;">Invitados de Honor: EMILIANO Martinez Solis| MAXIMILIANO Popoca Molina | IAN Josue Gordillo Salazar | IKER Mendez Leon | EITHAN |</p>
+
+        
+    </header>
+
+    <section class="time-panels" aria-label="Sincronización horaria">
+      <article class="panel">
+        <h2>Hora en Ciudad de México</h2>
+        <div class="digital-clock" id="mexico-clock">--:--:--</div>
+        <span class="date" id="mexico-date">Sincronizando...</span>
+      </article>
+      <article class="panel">
+        <h2>Tu hora local (<span id="local-tz">---</span>)</h2>
+        <div class="digital-clock" id="local-clock">--:--:--</div>
+        <span class="date" id="local-date">Sincronizando...</span>
+      </article>
+    </section>
+
+    <section class="countdown" aria-label="Cuenta regresiva principal">
+      <article class="segment" data-unit="hours">
+        <span class="value">00</span>
+        <span class="label">Horas</span>
+      </article>
+      <article class="segment" data-unit="minutes">
+        <span class="value">00</span>
+        <span class="label">Minutos</span>
+      </article>
+      <article class="segment" data-unit="seconds">
+        <span class="value">00</span>
+        <span class="label">Segundos</span>
+      </article>
+    </section>
+
+    <p class="countdown-caption">Próximo lanzamiento a las <span id="launch-time">--:--</span> (hora de Ciudad de México)</p>
+
+    <div class="progress-wrapper">
+      <div class="progress-bar" role="progressbar" aria-live="polite" aria-label="Progreso hasta el lanzamiento">
+        <div class="progress-bar__fill"></div>
+      </div>
+      <p id="progress-label">0% completado</p>
+    </div>
+
+    <div class="rocket-trail" aria-hidden="true">
+      <div class="rocket">
+        <span class="rocket-body"></span>
+        <span class="rocket-window"></span>
+        <span class="rocket-fin rocket-fin--left"></span>
+        <span class="rocket-fin rocket-fin--right"></span>
+        <span class="rocket-flame"></span>
+      </div>
+    </div>
+
+    
+
+    <section class="phase-section" aria-label="Fases de la misión">
+      <h2>Fases de la misión</h2>
+      <ol class="phase-tracker">
+        <li data-phase="prep">
+          <span class="phase-title">Preparación extendida</span>
+          <span class="phase-desc">Añadiedo Detalles ala Modelo Diane</span>
+        </li>
+        <li data-phase="window">
+          <span class="phase-title">Ventana activa</span>
+          <span class="phase-desc">Empieza Cuenta Regresiva</span>
+        </li>
+        <li data-phase="final">
+          <span class="phase-title">Cuenta final</span>
+          <span class="phase-desc">Últimos 60 minutos: Añadiento mas detalles & creando instagram</span>
+        </li>
+        <li data-phase="ignition">
+          <span class="phase-title">Ignición</span>
+          <span class="phase-desc">Últimos 5 minutos: Inicio de R34 Ultimate </span>
+        </li>
+      </ol>
+    </section>
+
+    
+
+    <footer class="footer">
+        <span class="chip">|° Provechito  X | ° Apple Inc</span>
+      <span class="chip">+18 No Abrir Si Eres Menor de Edad</span>
+      
+    </footer>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const mexicoClockEl = document.getElementById('mexico-clock');
+      const mexicoDateEl = document.getElementById('mexico-date');
+      const localClockEl = document.getElementById('local-clock');
+      const localDateEl = document.getElementById('local-date');
+      const localTzEl = document.getElementById('local-tz');
+      const missionStatusEl = document.getElementById('mission-status');
+      const progressFillEl = document.querySelector('.progress-bar__fill');
+      const progressLabelEl = document.getElementById('progress-label');
+      const rocketEl = document.querySelector('.rocket');
+      const phaseItems = document.querySelectorAll('.phase-tracker li');
+      const timeToWindowEl = document.getElementById('time-to-window');
+      const windowStartEl = document.getElementById('window-start');
+      const launchTimeEl = document.getElementById('launch-time');
+      const localSyncEl = document.getElementById('local-sync');
+      const countdownSegments = {
+        hours: document.querySelector('[data-unit="hours"] .value'),
+        minutes: document.querySelector('[data-unit="minutes"] .value'),
+        seconds: document.querySelector('[data-unit="seconds"] .value')
+      };
+
+      const state = {
+        previousValues: { hours: null, minutes: null, seconds: null },
+        redirectScheduled: false
+      };
+
+      const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'tu zona horaria';
+      localTzEl.textContent = localTimezone.replace(/_/g, ' ');
+
+      function getMexicoNow() {
+        const now = new Date();
+        return new Date(now.toLocaleString('en-US', { timeZone: 'America/Mexico_City' }));
+      }
+
+      function getNextLaunch(referenceDate = getMexicoNow()) {
+        const launch = new Date(referenceDate);
+        launch.setHours(15, 25, 0, 0);
+        if (referenceDate >= launch) {
+          launch.setDate(launch.getDate() + 1);
+        }
+        return launch;
+      }
+
+      const launchTime = getNextLaunch();
+      const twoHoursMs = 2 * 60 * 60 * 1000;
+      const launchTimeFormatter = new Intl.DateTimeFormat('es-MX', {
+        timeZone: 'America/Mexico_City',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+      launchTimeEl.textContent = `${launchTimeFormatter.format(launchTime)} hrs`;
+
+      const windowStart = new Date(launchTime.getTime() - twoHoursMs);
+      windowStartEl.textContent = `${launchTimeFormatter.format(windowStart)} hrs`;
+
+      const mexicoDateFormatter = new Intl.DateTimeFormat('es-MX', {
+        timeZone: 'America/Mexico_City',
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      const mexicoTimeFormatter = new Intl.DateTimeFormat('es-MX', {
+        timeZone: 'America/Mexico_City',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+
+      const localDateFormatter = new Intl.DateTimeFormat('es-MX', {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+
+      const localTimeFormatter = new Intl.DateTimeFormat('es-MX', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+
+      function formatDuration(ms) {
+        const positiveMs = Math.max(ms, 0);
+        const hours = Math.floor(positiveMs / (1000 * 60 * 60));
+        const minutes = Math.floor((positiveMs % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((positiveMs % (1000 * 60)) / 1000);
+        return `${hours.toString().padStart(2, '0')}h ${minutes
+          .toString()
+          .padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+      }
+
+      function setCountdownSegment(unit, value) {
+        const segment = countdownSegments[unit];
+        const formatted = value.toString().padStart(2, '0');
+        if (state.previousValues[unit] !== formatted) {
+          segment.textContent = formatted;
+          const parent = segment.parentElement;
+          parent.classList.remove('pulse');
+          void parent.offsetWidth;
+          parent.classList.add('pulse');
+          state.previousValues[unit] = formatted;
+        }
+      }
+
+      function highlightPhase(diffMs) {
+        const minutesRemaining = diffMs / (1000 * 60);
+        let activePhase = 'ignition';
+
+        if (minutesRemaining > 120) {
+          activePhase = 'prep';
+        } else if (minutesRemaining > 60) {
+          activePhase = 'window';
+        } else if (minutesRemaining > 5) {
+          activePhase = 'final';
+        } else if (minutesRemaining > 0) {
+          activePhase = 'ignition';
+        } else {
+          activePhase = 'ignition';
+        }
+
+        phaseItems.forEach(item => {
+          if (item.dataset.phase === activePhase) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      }
+
+      function updateMissionStatus(diffMs) {
+        const minutesRemaining = diffMs / (1000 * 60);
+        let message = 'Los sistemas están sincronizados con Ciudad de México.';
+
+        if (minutesRemaining > 180) {
+          message = 'Fase extendida: afinando trayectorias antes de entrar a la ventana crítica.';
+        } else if (minutesRemaining > 120) {
+          message = 'Última verificación previa a la ventana de 2 horas. Todo se mantiene estable.';
+        } else if (minutesRemaining > 60) {
+          message = 'Dentro de la ventana oficial de 2 horas. Monitorizando parámetros en tiempo real.';
+        } else if (minutesRemaining > 15) {
+          message = 'Cuenta final activada. Flujos energéticos estables y tripulación en posición.';
+        } else if (minutesRemaining > 0) {
+          message = '¡Ignición preparada! Ajustes finos y seguridad en modo intensivo.';
+        } else {
+          message = '¡Despegue confirmado! Redireccionando a la página de misión.';
+        }
+
+        missionStatusEl.textContent = message;
+      }
+
+      function triggerLaunch() {
+        if (state.redirectScheduled) return;
+        state.redirectScheduled = true;
+        missionStatusEl.textContent = '¡Lanzamiento completado! Preparando redirección...';
+        rocketEl.classList.add('launch');
+        progressFillEl.style.width = '100%';
+        progressLabelEl.textContent = '100% completado';
+        setTimeout(() => {
+          window.location.href = 'https://paginaweb.com';
+        }, 4500);
+      }
+
+      function updateClocks(mexicoNow) {
+        mexicoClockEl.textContent = mexicoTimeFormatter.format(mexicoNow);
+        mexicoDateEl.textContent = mexicoDateFormatter.format(mexicoNow);
+
+        const localNow = new Date();
+        localClockEl.textContent = localTimeFormatter.format(localNow);
+        localDateEl.textContent = localDateFormatter.format(localNow);
+        localSyncEl.textContent = `${localTimeFormatter.format(localNow)} (${localTimezone.replace(/_/g, ' ')})`;
+      }
+
+      function updateCountdown() {
+        const mexicoNow = getMexicoNow();
+        updateClocks(mexicoNow);
+
+        const diffMs = launchTime.getTime() - mexicoNow.getTime();
+
+        if (diffMs <= 0) {
+          setCountdownSegment('hours', 0);
+          setCountdownSegment('minutes', 0);
+          setCountdownSegment('seconds', 0);
+          highlightPhase(0);
+          updateMissionStatus(0);
+          triggerLaunch();
+          return;
+        }
+
+        const hours = Math.floor(diffMs / (1000 * 60 * 60));
+        const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+        setCountdownSegment('hours', hours);
+        setCountdownSegment('minutes', minutes);
+        setCountdownSegment('seconds', seconds);
+
+        highlightPhase(diffMs);
+        updateMissionStatus(diffMs);
+
+        const windowDiff = diffMs - twoHoursMs;
+        if (windowDiff > 0) {
+          timeToWindowEl.textContent = formatDuration(windowDiff);
+        } else {
+          timeToWindowEl.textContent = 'Dentro de la ventana crítica';
+        }
+
+        let progress = 1 - Math.max(diffMs, 0) / twoHoursMs;
+        progress = Math.max(0, Math.min(progress, 1));
+        progressFillEl.style.width = `${(progress * 100).toFixed(2)}%`;
+        progressLabelEl.textContent = `${(progress * 100).toFixed(1)}% completado`;
+
+        rocketEl.style.setProperty('--rocket-progress', (progress * 100).toFixed(2));
+      }
+
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      let animationFrameId;
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function initStars() {
+        const starCount = Math.floor((window.innerWidth + window.innerHeight) / 4);
+        stars = Array.from({ length: starCount }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.4 + 0.2,
+          alpha: Math.random(),
+          delta: Math.random() * 0.02 + 0.005,
+          velocity: Math.random() * 0.4 + 0.1
+        }));
+      }
+
+      function drawStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(star => {
+          star.alpha += star.delta;
+          if (star.alpha <= 0 || star.alpha >= 1) {
+            star.delta *= -1;
+          }
+
+          star.y += star.velocity;
+          if (star.y > canvas.height) {
+            star.y = -2;
+            star.x = Math.random() * canvas.width;
+          }
+
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha.toFixed(2)})`;
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        animationFrameId = requestAnimationFrame(drawStars);
+      }
+
+      resizeCanvas();
+      initStars();
+      drawStars();
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        initStars();
+      });
+
+      updateCountdown();
+      const countdownTimer = setInterval(updateCountdown, 1000);
+
+      window.addEventListener('beforeunload', () => {
+        cancelAnimationFrame(animationFrameId);
+        clearInterval(countdownTimer);
+      });
+    });
+  </script>
+</body>
+</html>
