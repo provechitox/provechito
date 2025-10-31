@@ -1,67 +1,177 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="refresh" content="0;url=https://paginaweb.com">
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Redirigiendo…</title>
-  <style>
-    /* Estilos simples para pantalla de redirección */
-    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
-    html,body{height:100%;margin:0}
-    body{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:linear-gradient(135deg,#0f172a 0%,#0b1220 100%);
-      color:#e6eef8;
-      -webkit-font-smoothing:antialiased;
-      text-align:center;
-      padding:24px;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vive Con Drogas | Sitio en Construcción</title>
+
+<style>
+    /* === RESET === */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-    .card{
-      max-width:520px;
-      width:100%;
-      border-radius:12px;
-      padding:28px;
-      box-shadow:0 10px 30px rgba(2,6,23,.6);
-      backdrop-filter:blur(6px);
+
+    body {
+        font-family: 'Poppins', Arial, sans-serif;
+        height: 100vh;
+        background: linear-gradient(135deg, #0a0a0f, #1e1e2f);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
     }
-    h1{margin:0 0 8px;font-size:20px;font-weight:600}
-    p{margin:0 0 14px;color:rgba(230,238,248,.85)}
-    .spinner{
-      width:44px;height:44px;border-radius:50%;
-      border:4px solid rgba(230,238,248,.15);
-      border-top-color:rgba(230,238,248,.95);
-      margin:12px auto 0;
-      animation:spin .8s linear infinite;
+
+    /* === FONDO ANIMADO === */
+    body::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: radial-gradient(circle at 20% 30%, rgba(0,123,255,0.2), transparent 70%),
+                    radial-gradient(circle at 80% 70%, rgba(255,0,150,0.2), transparent 70%);
+        animation: backgroundShift 10s infinite alternate ease-in-out;
+        z-index: 0;
     }
-    @keyframes spin{to{transform:rotate(360deg)}}
-    a{color:inherit;text-decoration:underline}
-  </style>
+    @keyframes backgroundShift {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.1); }
+    }
+
+    /* === TICKER === */
+    .ticker-container {
+        width: 90%;
+        max-width: 800px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        padding: 15px 0;
+        white-space: nowrap;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 2;
+        backdrop-filter: blur(6px);
+    }
+
+    .ticker-content {
+        display: inline-block;
+        padding-left: 100%;
+        animation: ticker 18s linear infinite;
+        font-size: 1.2rem;
+        letter-spacing: 0.5px;
+    }
+
+    @keyframes ticker {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
+    }
+
+    /* === LOADING === */
+    .loading-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 50px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .loading-container span {
+        font-size: 1.1rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+        color: #ccc;
+        text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        background-color: #00bfff;
+        border-radius: 50%;
+        display: inline-block;
+        animation: bounce 1.4s infinite ease-in-out both;
+        box-shadow: 0 0 10px #00bfff;
+    }
+
+    .dot1 { animation-delay: -0.32s; }
+    .dot2 { animation-delay: -0.16s; }
+    .dot3 { animation-delay: 0s; }
+
+    @keyframes bounce {
+        0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+        40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* === EFECTO DE ENTRADA === */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeIn 1.2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* === FOOTER === */
+    footer {
+        position: absolute;
+        bottom: 20px;
+        font-size: 0.9rem;
+        color: #888;
+        letter-spacing: 0.5px;
+        z-index: 2;
+    }
+
+</style>
 </head>
 <body>
-  <div class="card" role="status" aria-live="polite">
-    <h1>Redirigiendo a Sweetie Fox </h1>
-    <p>Si la redirección no funciona, haz clic en el siguiente enlace:</p>
-    <p><a href="https://es.pornhub.com/model/sweetie-fox" target="_blank" rel="noopener">https://es.pornhub.com/model/sweetie-fox</a></p>
-    <div class="spinner" aria-hidden="true"></div>
-  </div>
 
-  <script>
-    // JavaScript para redirección inmediata y como respaldo de meta-refresh.
-    // Usamos location.replace para no dejar rastro en el historial.
-    (function(){
-      try {
-        // Si el documento aún no está cargado completamente, ejecutar en next tick.
-        setTimeout(function(){
-          location.replace("https://es.pornhub.com/model/sweetie-fox");
-        }, 0);
-      } catch (e) {
-        // Si algo falla, dejar el enlace visible para que el usuario haga clic.
-        console.error("Redirección fallida:", e);
-      }
-    })();
-  </script>
+    <div class="ticker-container fade-in">
+        <span class="ticker-content">
+            🚧 Este sitio web está en construcción — Pronto estará disponible todo el contenido oficial de Vive Con Drogas
+            
+        </span>
+    </div>
+
+    <div class="loading-container fade-in" style="animation-delay: 0.5s;">
+        <span>Cargando</span>
+        <div class="dot dot1"></div>
+        <div class="dot dot2"></div>
+        <div class="dot dot3"></div>
+    </div>
+
+    <footer class="fade-in" style="animation-delay: 1s;">
+        © 2025 Provechito. Todos los derechos reservados.
+    </footer>
+
+<script>
+    // Efecto dinámico de color en el texto del ticker
+    const ticker = document.querySelector('.ticker-content');
+    const colors = ['#00bfff', '#ff00aa', '#00ffaa', '#ffaa00'];
+    let i = 0;
+
+    setInterval(() => {
+        ticker.style.color = colors[i];
+        i = (i + 1) % colors.length;
+    }, 1500);
+
+    // Pequeño efecto de sonido visual simulado (parpadeo suave)
+    const dots = document.querySelectorAll('.dot');
+    setInterval(() => {
+        dots.forEach(dot => dot.style.boxShadow = `0 0 ${Math.random()*20}px #00bfff`);
+    }, 200);
+</script>
+
 </body>
 </html>
